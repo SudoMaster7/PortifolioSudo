@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfólio — Leonardo Brito
 
-## Getting Started
+Site de portfólio pessoal. Next.js 16 (App Router) + TypeScript + Tailwind CSS 4, PT/EN, deploy na Vercel.
 
-First, run the development server:
+## Rodar
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    npm install
+    npm run dev      # http://localhost:3000 → redireciona para /pt
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build e produção
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    npm run build
+    npm run start
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Estrutura
 
-## Learn More
+    src/app/[locale]/page.tsx                   home (todas as seções)
+    src/app/[locale]/projetos/[slug]/page.tsx   case de cada projeto
+    src/app/sitemap.ts · robots.ts              SEO
+    src/content/pt.ts · en.ts                   TODO o texto do site
+    src/content/site.ts                         contato, stack, certificações
+    src/components/                             Header, Footer, ProjectCard, Reveal, TerminalPrompt
+    public/curriculo.pdf                        currículo para download
 
-To learn more about Next.js, take a look at the following resources:
+## Editar conteúdo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Nenhum texto está dentro de componente. Para mudar qualquer coisa do site,
+edite `src/content/pt.ts` (e o equivalente em `en.ts`).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Para adicionar um projeto: acrescente um objeto no array `projectsPt` **e** em
+`projectsEn` com o mesmo `slug`. A página de case, o sitemap e a navegação
+"próximo projeto" são gerados automaticamente.
 
-## Deploy on Vercel
+`featured: true` coloca o projeto no grid principal; `false` manda para a
+faixa secundária.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Regra de publicação
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Campo vazio, `null` ou com marcador provisório entre `[colchetes]`,
+"a confirmar", "em breve" **não renderiza** — a linha some em vez de publicar
+placeholder. A regra vive em `src/lib/utils.ts` (`isPublishable`).
+
+Nunca coloque telefone de exemplo ou número arredondado no conteúdo.
+
+## Deploy na Vercel
+
+1. `git push` para um repositório no GitHub.
+2. Importe o repositório na Vercel (detecta Next.js sozinho, sem configuração).
+3. Defina a variável de ambiente `NEXT_PUBLIC_SITE_URL` com o domínio final
+   (ex.: `https://leonardobrito.dev`) — ela alimenta o sitemap e o robots.txt.
+
+## Pendências
+
+- [ ] Registrar o domínio e apontar para a Vercel
+- [ ] Foto profissional para o hero
+- [ ] Prints / vídeos curtos de cada projeto (dados sensíveis borrados)
+- [ ] Autorização dos clientes para citar nomes (hoje estão genéricos)
+- [ ] Confirmar o que pode ser divulgado da Fuzzy Lab
+- [ ] Link de verificação do certificado do LinkedIn Learning
+- [ ] Imagem OG personalizada
