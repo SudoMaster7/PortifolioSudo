@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cx } from "@/lib/utils";
+import ThemeToggle from "./ThemeToggle";
 import type { Locale } from "@/content";
 
 type NavLabels = {
@@ -14,6 +15,7 @@ type NavLabels = {
   education: string;
   contact: string;
   resume: string;
+  theme: string;
 };
 
 const SECTIONS = ["about", "stack", "projects", "experience", "education", "contact"] as const;
@@ -60,8 +62,6 @@ export default function Header({ locale, nav }: { locale: Locale; nav: NavLabels
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
-
   const link = (id: string, label: string) => (
     <Link
       key={id}
@@ -97,9 +97,12 @@ export default function Header({ locale, nav }: { locale: Locale; nav: NavLabels
           {link("contact", nav.contact)}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle label={nav.theme} />
+
           <Link
             href={otherHref}
+            onClick={() => setOpen(false)}
             className="mono rounded-md border border-line px-2.5 py-1 text-[11px] text-muted transition-colors hover:border-gold hover:text-gold"
             aria-label={locale === "pt" ? "Switch to English" : "Mudar para português"}
           >

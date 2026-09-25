@@ -10,7 +10,11 @@ type Props = {
   as?: "div" | "section" | "li" | "article";
 };
 
-/** Entrada sutil ao aparecer na viewport. Respeita prefers-reduced-motion. */
+/**
+ * Entrada sutil ao aparecer na viewport.
+ * Quem pediu prefers-reduced-motion recebe o conteúdo já visível,
+ * resolvido em CSS (variantes motion-reduce) e não em JS.
+ */
 export default function Reveal({ children, className, delay = 0, as = "div" }: Props) {
   const ref = useRef<HTMLElement | null>(null);
   const [shown, setShown] = useState(false);
@@ -18,12 +22,6 @@ export default function Reveal({ children, className, delay = 0, as = "div" }: P
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setShown(true);
-      return;
-    }
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -48,7 +46,8 @@ export default function Reveal({ children, className, delay = 0, as = "div" }: P
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={cx(
-        "transition-all duration-700 ease-out motion-reduce:transition-none",
+        "transition-all duration-700 ease-out",
+        "motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
         shown ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
         className,
       )}

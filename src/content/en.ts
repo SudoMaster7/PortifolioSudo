@@ -14,6 +14,7 @@ export const en = {
     education: "Education",
     contact: "Contact",
     resume: "Resume",
+    theme: "Toggle light/dark theme",
   },
   hero: {
     prompt: "leo@sudo:~$ whoami",

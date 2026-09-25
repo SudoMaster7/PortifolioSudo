@@ -1,14 +1,47 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg: #0e0f12;
-  --color-surface: #16181d;
-  --color-surface-2: #1c1f26;
-  --color-line: #262930;
-  --color-ink: #edeae3;
-  --color-muted: #9a9ca3;
-  --color-gold: #c9a14a;
-  --color-gold-soft: #e0bd70;
+/* ---------------------------------------------------------------
+   TEMAS
+   O tema padrão é o escuro (obsidiana). A classe .light no <html>
+   troca os valores base; todos os componentes usam apenas os tokens
+   semânticos (bg, surface, line, ink, muted, gold), nunca cor crua.
+   --------------------------------------------------------------- */
+:root,
+.dark {
+  color-scheme: dark;
+  --bg: #0e0f12;
+  --surface: #16181d;
+  --surface-2: #1c1f26;
+  --line: #262930;
+  --ink: #edeae3;
+  --muted: #9a9ca3;
+  --gold: #c9a14a;
+  --gold-soft: #e0bd70;
+  --glow: 12%;
+}
+
+.light {
+  color-scheme: light;
+  --bg: #faf8f4;
+  --surface: #ffffff;
+  --surface-2: #f2efe8;
+  --line: #e0dbd0;
+  --ink: #1a1b1f;
+  --muted: #5f6169;
+  --gold: #7d5e18;
+  --gold-soft: #6f520e;
+  --glow: 9%;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
 
   --font-display: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
@@ -17,23 +50,27 @@
 
 @layer base {
   * {
-    border-color: var(--color-line);
+    border-color: var(--line);
   }
 
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    background-color: var(--bg);
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-ink);
+    background-color: var(--bg);
+    color: var(--ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
   }
 
   ::selection {
-    background-color: color-mix(in srgb, var(--color-gold) 35%, transparent);
+    background-color: color-mix(in srgb, var(--gold) 35%, transparent);
   }
 
   h1,
@@ -42,6 +79,12 @@
     font-family: var(--font-display);
     font-weight: 300;
     letter-spacing: -0.01em;
+  }
+
+  .light h1,
+  .light h2,
+  .light h3 {
+    font-weight: 400;
   }
 }
 
@@ -61,8 +104,8 @@
     background-image: linear-gradient(
       90deg,
       transparent,
-      var(--color-line) 15%,
-      var(--color-line) 85%,
+      var(--line) 15%,
+      var(--line) 85%,
       transparent
     );
     height: 1px;
@@ -71,7 +114,7 @@
   .gold-glow {
     background: radial-gradient(
       60% 55% at 70% 10%,
-      color-mix(in srgb, var(--color-gold) 12%, transparent),
+      color-mix(in srgb, var(--gold) var(--glow), transparent),
       transparent 70%
     );
   }
@@ -80,5 +123,9 @@
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  body {
+    transition: none;
   }
 }

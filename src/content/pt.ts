@@ -14,6 +14,7 @@ export const pt = {
     education: "Formação",
     contact: "Contato",
     resume: "Currículo",
+    theme: "Alternar tema claro/escuro",
   },
   hero: {
     prompt: "leo@sudo:~$ whoami",

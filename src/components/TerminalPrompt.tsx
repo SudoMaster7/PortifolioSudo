@@ -4,14 +4,20 @@ import { useEffect, useState } from "react";
 
 /** Prompt de terminal com digitação. Sem animação se prefers-reduced-motion. */
 export default function TerminalPrompt({ text }: { text: string }) {
-  const [shown, setShown] = useState(text);
-  const [done, setDone] = useState(true);
+  const [shown, setShown] = useState("");
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    setShown("");
-    setDone(false);
+    if (reduced) {
+      const raf = window.requestAnimationFrame(() => {
+        setShown(text);
+        setDone(true);
+      });
+      return () => window.cancelAnimationFrame(raf);
+    }
+
     let i = 0;
     const id = window.setInterval(() => {
       i += 1;
@@ -26,14 +32,19 @@ export default function TerminalPrompt({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <p className="mono text-xs text-gold sm:text-sm" aria-label={text}>
+    <p className="mono min-h-[1.2em] text-xs text-gold sm:text-sm" aria-label={text}>
       <span aria-hidden>{shown}</span>
       <span
         aria-hidden
-        className={done ? "ml-0.5 inline-block w-2 animate-pulse bg-gold text-transparent" : "ml-0.5 inline-block w-2 bg-gold text-transparent"}
+        className={cursorClass(done)}
       >
         .
       </span>
     </p>
   );
+}
+
+function cursorClass(done: boolean) {
+  const base = "ml-0.5 inline-block w-2 bg-gold text-transparent";
+  return done ? `${base} animate-pulse` : base;
 }
